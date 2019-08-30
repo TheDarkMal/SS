@@ -1,0 +1,209 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema school_soft
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema school_soft
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `school_soft` DEFAULT CHARACTER SET utf8 ;
+USE `school_soft` ;
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`tipoUsuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`tipoUsuario` (
+  `idtipoUsuario` INT NOT NULL,
+  `tipoUsuario` VARCHAR(45) NULL,
+  PRIMARY KEY (`idtipoUsuario`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`periodo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`periodo` (
+  `idperiodo` INT NOT NULL,
+  `nombrePeriodo` VARCHAR(45) NULL,
+  `inicio` DATE NULL,
+  `fin` DATE NULL,
+  PRIMARY KEY (`idperiodo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`horarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`horarios` (
+  `idhorarios` INT NOT NULL,
+  `periodo_idperiodo` INT NOT NULL,
+  PRIMARY KEY (`idhorarios`),
+  INDEX `fk_horarios_periodo1_idx` (`periodo_idperiodo` ASC) VISIBLE,
+  CONSTRAINT `fk_horarios_periodo1`
+    FOREIGN KEY (`periodo_idperiodo`)
+    REFERENCES `school_soft`.`periodo` (`idperiodo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`usuario` (
+  `idusuario` INT NOT NULL,
+  `usuario` VARCHAR(45) NULL,
+  `clave` VARCHAR(45) NULL,
+  `nombre` VARCHAR(45) NULL,
+  `apellido` VARCHAR(45) NULL,
+  `direccion` VARCHAR(100) NULL,
+  `telefono` VARCHAR(45) NULL,
+  `fechaNacimiento` DATETIME NULL,
+  `tipoUsuario_idtipoUsuario` INT NOT NULL,
+  `horarios_idhorarios` INT NOT NULL,
+  PRIMARY KEY (`idusuario`),
+  INDEX `fk_usuario_tipoUsuario1_idx` (`tipoUsuario_idtipoUsuario` ASC) VISIBLE,
+  INDEX `fk_usuario_horarios1_idx` (`horarios_idhorarios` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_tipoUsuario1`
+    FOREIGN KEY (`tipoUsuario_idtipoUsuario`)
+    REFERENCES `school_soft`.`tipoUsuario` (`idtipoUsuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_usuario_horarios1`
+    FOREIGN KEY (`horarios_idhorarios`)
+    REFERENCES `school_soft`.`horarios` (`idhorarios`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`jornada`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`jornada` (
+  `idjornada` INT NOT NULL,
+  `nombreJornada` VARCHAR(45) NULL,
+  `inicio` TIME NULL,
+  `fin` TIME NULL,
+  `periodo_idperiodo` INT NOT NULL,
+  PRIMARY KEY (`idjornada`),
+  INDEX `fk_jornada_periodo_idx` (`periodo_idperiodo` ASC) VISIBLE,
+  CONSTRAINT `fk_jornada_periodo`
+    FOREIGN KEY (`periodo_idperiodo`)
+    REFERENCES `school_soft`.`periodo` (`idperiodo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`diaSemana`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`diaSemana` (
+  `iddiaSemana` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  PRIMARY KEY (`iddiaSemana`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`bloque`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`bloque` (
+  `idbloque` INT NOT NULL,
+  `inicio` TIME NULL,
+  `fin` TIME NULL,
+  `diaSemana_iddiaSemana` INT NOT NULL,
+  `jornada_idjornada` INT NOT NULL,
+  PRIMARY KEY (`idbloque`),
+  INDEX `fk_bloque_diaSemana1_idx` (`diaSemana_iddiaSemana` ASC) VISIBLE,
+  INDEX `fk_bloque_jornada1_idx` (`jornada_idjornada` ASC) VISIBLE,
+  CONSTRAINT `fk_bloque_diaSemana1`
+    FOREIGN KEY (`diaSemana_iddiaSemana`)
+    REFERENCES `school_soft`.`diaSemana` (`iddiaSemana`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_bloque_jornada1`
+    FOREIGN KEY (`jornada_idjornada`)
+    REFERENCES `school_soft`.`jornada` (`idjornada`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`asignatura`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`asignatura` (
+  `idasignatura` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `bloque_idbloque` INT NOT NULL,
+  PRIMARY KEY (`idasignatura`),
+  INDEX `fk_asignatura_bloque1_idx` (`bloque_idbloque` ASC) VISIBLE,
+  CONSTRAINT `fk_asignatura_bloque1`
+    FOREIGN KEY (`bloque_idbloque`)
+    REFERENCES `school_soft`.`bloque` (`idbloque`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`grado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`grado` (
+  `idgrado` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `asignatura_idasignatura` INT NOT NULL,
+  PRIMARY KEY (`idgrado`),
+  INDEX `fk_grado_asignatura1_idx` (`asignatura_idasignatura` ASC) VISIBLE,
+  CONSTRAINT `fk_grado_asignatura1`
+    FOREIGN KEY (`asignatura_idasignatura`)
+    REFERENCES `school_soft`.`asignatura` (`idasignatura`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`curso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`curso` (
+  `idcurso` INT NOT NULL,
+  `consecutivo` VARCHAR(45) NULL,
+  `grado_idgrado` INT NOT NULL,
+  PRIMARY KEY (`idcurso`),
+  INDEX `fk_curso_grado1_idx` (`grado_idgrado` ASC) VISIBLE,
+  CONSTRAINT `fk_curso_grado1`
+    FOREIGN KEY (`grado_idgrado`)
+    REFERENCES `school_soft`.`grado` (`idgrado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `school_soft`.`salon`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `school_soft`.`salon` (
+  `idsalon` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `curso_idcurso` INT NOT NULL,
+  PRIMARY KEY (`idsalon`),
+  INDEX `fk_salon_curso1_idx` (`curso_idcurso` ASC) VISIBLE,
+  CONSTRAINT `fk_salon_curso1`
+    FOREIGN KEY (`curso_idcurso`)
+    REFERENCES `school_soft`.`curso` (`idcurso`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

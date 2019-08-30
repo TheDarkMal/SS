@@ -1,0 +1,15 @@
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\prueba.exe.config
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\prueba.exe
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\prueba.pdb
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.Form1.resources
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.Properties.Resources.resources
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.csproj.GenerateResource.cache
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.csproj.CoreCompileInputs.cache
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.exe
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.pdb
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\MySql.Data.dll
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\Google.Protobuf.dll
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\Diego\source\repos\prueba\prueba\bin\Debug\MySql.Data.xml
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.csprojAssemblyReference.cache
+C:\Users\Diego\source\repos\prueba\prueba\obj\Debug\prueba.csproj.CopyComplete
